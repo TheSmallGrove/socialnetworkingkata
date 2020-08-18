@@ -54,7 +54,10 @@ namespace Claranet.SocialNetworkingKata.Providers
 
                 using (var command = new SQLiteCommand(connection))
                 {
-                    command.CommandText = @"SELECT COUNT(*) FROM FollowedUsers WHERE User = @user AND Followed = @followed";
+                    command.CommandText = 
+                        $"SELECT COUNT(*) " +
+                        $"FROM FollowedUsers " +
+                        $"WHERE lower(User) = lower(@user) AND lower(Followed) = lower(@followed)";
                     command.Parameters.AddWithValue("@user", user);
                     command.Parameters.AddWithValue("@followed", userToFollow);
                     var result = (long)(await command.ExecuteScalarAsync());
@@ -93,7 +96,7 @@ namespace Claranet.SocialNetworkingKata.Providers
 
                 using (var command = new SQLiteCommand(connection))
                 {
-                    command.CommandText = @"SELECT * FROM Posts WHERE Author = @user ORDER BY TIME DESC";
+                    command.CommandText = @"SELECT * FROM Posts WHERE lower(Author) = lower(@user) ORDER BY TIME DESC";
                     command.Parameters.AddWithValue("@user", user);
                     var reader = (await command.ExecuteReaderAsync());
 
@@ -125,9 +128,9 @@ namespace Claranet.SocialNetworkingKata.Providers
                     command.CommandText = 
                         $"SELECT P.* FROM Posts P " +
                         $"INNER JOIN FollowedUsers F ON P.Author = F.Followed " +
-                        $"WHERE F.User = @user " +
+                        $"WHERE lower(F.User) = lower(@user) " +
                         $"UNION " +
-                        $"SELECT Posts.* FROM Posts WHERE Author = @user " +
+                        $"SELECT Posts.* FROM Posts WHERE lower(Author) = lower(@user) " +
                         $"ORDER BY TIME DESC";
                     command.Parameters.AddWithValue("@user", user);
                     var reader = (await command.ExecuteReaderAsync());
