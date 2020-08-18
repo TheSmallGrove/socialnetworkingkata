@@ -55,5 +55,10 @@ namespace Claranet.SocialNetworkingKata.Providers
                                           select post)
                                           .Union(await this.GetMessagesByUser(user)));
         }
+
+        public Task InitializeIfRequired()
+        {
+            return Task.CompletedTask;
+        }
     }
 }
