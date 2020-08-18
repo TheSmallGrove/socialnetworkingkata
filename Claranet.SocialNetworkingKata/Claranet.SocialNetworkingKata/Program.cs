@@ -14,7 +14,7 @@ namespace Claranet.SocialNetworkingKata
 
         public Program()
         {
-            this.Storage = new InMemoryProvider();
+            this.Storage = new SqlLiteProvider();
             this.Factory = new CommandFactory(this.Storage);
         }
 

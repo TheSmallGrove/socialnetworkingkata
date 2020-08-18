@@ -42,18 +42,20 @@ namespace Claranet.SocialNetworkingKata.Providers
 
         public Task<IEnumerable<Post>> GetMessagesByUser(string user)
         {
-            return Task.FromResult(from post in this.Posts
-                                   where post.Author == user
-                                   select post);
+            return Task.FromResult<IEnumerable<Post>>(from post in this.Posts
+                                                      where post.Author == user
+                                                      orderby post.Time descending
+                                                      select post);
         }
 
         public async Task<IEnumerable<Post>> GetWallByUser(string user)
         {
-            return await Task.FromResult((from post in this.Posts
+            return await Task.FromResult(((from post in this.Posts
                                           join follower in this.FollowedUsers on post.Author equals follower.Followed
                                           where follower.User == user
                                           select post)
-                                          .Union(await this.GetMessagesByUser(user)));
+                                          .Union(await this.GetMessagesByUser(user)))
+                                          .OrderByDescending(_ => _.Time));
         }
 
         public Task InitializeIfRequired()
