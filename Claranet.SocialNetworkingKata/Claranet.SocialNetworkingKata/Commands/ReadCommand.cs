@@ -24,7 +24,7 @@ namespace Claranet.SocialNetworkingKata.Commands
             {
                 var messages = await this.Storage.GetMessagesByUser(this.User);
 
-                foreach (var m in messages.OrderByDescending(_ => _.Time))
+                foreach (var m in messages)
                 {
                     Console.WriteLine($"{m.Message} ({m.Time.ToSocialTime()})");
                 }

@@ -8,6 +8,7 @@ namespace Claranet.SocialNetworkingKata.Providers
 {
     interface IStorageProvider
     {
+        Task InitializeIfRequired();
         Task AddMessageForUser(string author, string message, DateTime time);
         Task<IEnumerable<Post>> GetMessagesByUser(string user);
         Task AddFollowerToUser(string user, string userToFollow);
