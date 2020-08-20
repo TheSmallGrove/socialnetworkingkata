@@ -2,6 +2,7 @@
 using Lamar;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,7 +11,7 @@ namespace Claranet.SocialNetworkingKata.Commands
 {
     class CommandFactory
     {
-        static readonly Regex Regex = new Regex(@"^((?<command>exit)|(?<user>[^\s]*)\s*(?<command>follows|wall|exit|\-\>)?\s*(?<arg>.*))$", RegexOptions.IgnoreCase);
+        static readonly Regex Regex = new Regex(@"^((?<command>exit)|(?<user>.*?)(\s+(?<command>.*?)(\s+(?<arg>.*?))?)?)$", RegexOptions.IgnoreCase);
 
         private IContainer Container { get; }
 
@@ -26,12 +27,12 @@ namespace Claranet.SocialNetworkingKata.Commands
                 input = input.Trim();
 
                 if (string.IsNullOrEmpty(input))
-                    return nested.GetInstance<ISocialCommand>("noop");
+                    return nested.GetInstance<ISocialCommand>(Commands.NoOpName);
 
                 var match = CommandFactory.Regex.Match(input);
 
                 if (!match.Success)
-                    return nested.GetInstance<ISocialCommand>("unknown");
+                    return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
 
                 IDictionary<string, string> arguments = new Dictionary<string, string>();
 
@@ -42,17 +43,21 @@ namespace Claranet.SocialNetworkingKata.Commands
 
                 switch (command)
                 {
-                    case "exit":
-                        return nested.GetInstance<ISocialCommand>("exit");
-                    case "follows":
-                        return nested.GetInstance<ISocialCommand>("follow");
-                    case "wall":
-                        return nested.GetInstance<ISocialCommand>("wall");
-                    case "->":
-                        return nested.GetInstance<ISocialCommand>("post");
+                    case Commands.ExitCode:
+                        return nested.GetInstance<ISocialCommand>(Commands.ExitName);
+                    case Commands.FollowCode:
+                        return nested.GetInstance<ISocialCommand>(Commands.FollowName);
+                    case Commands.WallCode:
+                        return nested.GetInstance<ISocialCommand>(Commands.WallName);
+                    case Commands.PostCode:
+                        return nested.GetInstance<ISocialCommand>(Commands.PostName);
+                    case "":
+                        break;
+                    default:
+                        return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
                 }
 
-                return nested.GetInstance<ISocialCommand>("read");
+                return nested.GetInstance<ISocialCommand>(Commands.ReadName);
             }
         }
     }

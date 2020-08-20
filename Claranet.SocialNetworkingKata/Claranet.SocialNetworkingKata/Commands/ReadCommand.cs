@@ -1,4 +1,5 @@
-﻿using Claranet.SocialNetworkingKata.Providers;
+﻿using Claranet.SocialNetworkingKata.Properties;
+using Claranet.SocialNetworkingKata.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,27 @@ namespace Claranet.SocialNetworkingKata.Commands
 
         public ReadCommand(IStorageProvider storage, IInteractionProvider interaction, ITimeProvider time, IDictionary<string, string> arguments)
         {
-            this.Interaction = interaction;
-            this.Time = time;
+            if (storage == null)
+                throw new ArgumentNullException(nameof(storage));
+
             this.Storage = storage;
+
+            if (interaction == null)
+                throw new ArgumentNullException(nameof(interaction));
+
+            this.Interaction = interaction;
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            this.Time = time;
+
+            if (arguments == null)
+                throw new ArgumentNullException(nameof(arguments));
 
             string user;
             if (!arguments.TryGetValue("user", out user))
-                throw new ArgumentException(nameof(user));
+                throw new ArgumentException(Resources.Exception_MissingArgument, nameof(user));
             this.User = user;
         }
 
@@ -33,11 +48,11 @@ namespace Claranet.SocialNetworkingKata.Commands
                 var messages = await this.Storage.GetMessagesByUser(this.User);
 
                 foreach (var m in messages)
-                    this.Interaction.Write($"{m.Message} ({this.Time.ToSocialTime(m.Time)})");
+                    this.Interaction.Write(Resources.Message_ReadFormat, m.Message, this.Time.ToSocialTime(m.Time));
             }
             catch (Exception ex)
             {
-                this.Interaction.Error($"error reading: {ex.Message}");
+                this.Interaction.Error(Resources.Message_Exception, ex.Message);
             }
         }
     }
