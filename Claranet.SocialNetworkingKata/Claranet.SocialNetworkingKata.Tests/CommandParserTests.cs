@@ -101,5 +101,44 @@ namespace Claranet.SocialNetworkingKata.Tests
             Assert.Equal("wall", parsed.Value.command);
             Assert.Equal("", parsed.Value.args);
         }
+
+        [Theory]
+        [InlineData("Alice XXX", "Alice", "XXX", "")]
+        [InlineData("Bob    YYY ZZZ", "Bob", "YYY", "ZZZ")]
+        [InlineData("   Charlie    *=> AAAAAAAAAAAaaa", "Charlie", "*=>", "AAAAAAAAAAAaaa")]
+        public void Parse_Returns_Match_With_UnknownCommand(string input, string expecteduser, string expectedcommand, string expectedarg)
+        {
+            // ARRANGE
+            var parser = new CommandParser();
+
+            // ACT
+            var parsed = parser.Parse(input);
+
+            // ASSERT
+            Assert.True(parsed.HasValue);
+            Assert.Equal(expecteduser, parsed.Value.user);
+            Assert.Equal(expectedcommand, parsed.Value.command);
+            Assert.Equal(expectedarg, parsed.Value.args);
+        }
+
+        [Theory]
+        [InlineData("exit")]
+        [InlineData("   exit")]
+        [InlineData("  exit ")]
+        public void Parse_Returns_Match_With_ExitCommand(string input)
+        {
+            // ARRANGE
+            var parser = new CommandParser();
+
+            // ACT
+            var parsed = parser.Parse(input);
+
+            // ASSERT
+            Assert.True(parsed.HasValue);
+            Assert.Equal("", parsed.Value.user);
+            Assert.Equal("exit", parsed.Value.command);
+            Assert.Equal("", parsed.Value.args);
+        }
+
     }
 }

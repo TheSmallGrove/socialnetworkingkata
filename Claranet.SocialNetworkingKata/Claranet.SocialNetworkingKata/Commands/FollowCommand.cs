@@ -45,7 +45,7 @@ namespace Claranet.SocialNetworkingKata.Commands
             try
             {
                 await this.Storage.AddFollowerToUser(this.User, this.UserToFollow);
-                this.Interaction.Warn(Resources.Message_NowFollows, this.User, this.UserToFollow);
+                this.Interaction.Write(Resources.Message_NowFollows, this.User, this.UserToFollow);
             }
             catch(Exception ex)
             {
