@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Claranet.SocialNetworkingKata.Providers
 {
-    interface IInteractionProvider
+    public interface IInteractionProvider
     {
         void Write(string format, params object [] args);
         void Write(string message);

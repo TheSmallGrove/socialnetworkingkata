@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Claranet.SocialNetworkingKata.Entities
 {
-    class Post
+    public class Post
     {
         public string Author { get; set; }
         public DateTime Time { get; set; }

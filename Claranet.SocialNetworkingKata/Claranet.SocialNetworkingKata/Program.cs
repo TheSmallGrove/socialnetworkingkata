@@ -13,19 +13,19 @@ using System.Xml.Linq;
 
 namespace Claranet.SocialNetworkingKata
 {
-    class Program
+    public class Program
     {
-        private CommandFactory Factory { get; }
+        private ICommandFactory Factory { get; }
         private IStorageProvider Storage { get; }
         private ITimeProvider Time { get; }
         private IInteractionProvider Interaction { get; }
 
-        public Program(IContainer container)
+        public Program(IInteractionProvider interaction, ITimeProvider time, IStorageProvider storage, ICommandFactory factory)
         {
-            this.Interaction = container.GetInstance<IInteractionProvider>();
-            this.Time = container.GetInstance<ITimeProvider>();
-            this.Storage = container.GetInstance<IStorageProvider>();
-            this.Factory = new CommandFactory(container);
+            this.Interaction = interaction;
+            this.Time = time;
+            this.Storage = storage;
+            this.Factory = factory;
         }
 
         private async Task MainLoop()
@@ -53,6 +53,8 @@ namespace Claranet.SocialNetworkingKata
 
                  _.For<ITimeProvider>().Use<SystemTimeProvider>();
                  _.For<IInteractionProvider>().Use<SystemConsoleInteractionProvider>();
+                 _.For<ICommandParser>().Use<CommandParser>();
+                 _.For<ICommandFactory>().Use<CommandFactory>();
                  _.For<ISocialCommand>().Use<FollowCommand>().Named(Commands.Commands.FollowName);
                  _.For<ISocialCommand>().Use<WallCommand>().Named(Commands.Commands.WallName);
                  _.For<ISocialCommand>().Use<ReadCommand>().Named(Commands.Commands.ReadName);
@@ -62,7 +64,7 @@ namespace Claranet.SocialNetworkingKata
                  _.For<ISocialCommand>().Use<UnknownCommand>().Named(Commands.Commands.UnknownName);
              }))
             {
-                var program = new Program(container);
+                var program = container.GetInstance<Program>();
                 program.MainLoop().Wait();
             }            
         }

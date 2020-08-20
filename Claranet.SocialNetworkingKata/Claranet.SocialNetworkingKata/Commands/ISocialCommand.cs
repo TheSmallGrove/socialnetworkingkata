@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Claranet.SocialNetworkingKata.Commands
 {
-    interface ISocialCommand
+    public interface ISocialCommand
     {
         Task Execute();
     }

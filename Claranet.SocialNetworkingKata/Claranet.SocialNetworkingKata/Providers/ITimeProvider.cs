@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Claranet.SocialNetworkingKata.Providers
 {
-    interface ITimeProvider
+    public interface ITimeProvider
     {
         DateTime Now { get; }
         string ToSocialTime(DateTime time);
