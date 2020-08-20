@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Claranet.SocialNetworkingKata
+namespace Claranet.SocialNetworkingKata.Providers
 {
-    static class Extensions
+    class SystemTimeProvider : ITimeProvider
     {
-        public static string ToSocialTime(this DateTime time)
+        public DateTime Now => DateTime.Now;
+
+        public string ToSocialTime(DateTime time)
         {
-            TimeSpan span = DateTime.Now - time;
+            TimeSpan span = this.Now - time;
 
             if (Math.Round(span.TotalSeconds, 0) < 60)
                 return $"{Math.Round(span.TotalSeconds, 0)} seconds ago";
@@ -19,5 +21,6 @@ namespace Claranet.SocialNetworkingKata
 
             return $"at {time}";
         }
+
     }
 }

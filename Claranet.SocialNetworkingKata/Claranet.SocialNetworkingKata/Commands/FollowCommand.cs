@@ -10,12 +10,22 @@ namespace Claranet.SocialNetworkingKata.Commands
     {
         private string User { get; }
         private string UserToFollow { get; }
+        private IInteractionProvider Interaction { get; }
         private IStorageProvider Storage { get; }
 
-        public FollowCommand(IStorageProvider storage, string user, string userToFollow)
+        public FollowCommand(IStorageProvider storage, IInteractionProvider interaction, IDictionary<string, string> arguments)
         {
             this.Storage = storage;
+            this.Interaction = interaction;
+
+            string user;
+            if (!arguments.TryGetValue("user", out user))
+                throw new ArgumentException(nameof(user));
             this.User = user;
+
+            string userToFollow;
+            if (!arguments.TryGetValue("arg", out userToFollow))
+                throw new ArgumentException(nameof(userToFollow));
             this.UserToFollow = userToFollow;
         }
 
@@ -24,11 +34,11 @@ namespace Claranet.SocialNetworkingKata.Commands
             try
             {
                 await this.Storage.AddFollowerToUser(this.User, this.UserToFollow);
-                Console.WriteLine($"{this.User} now follows {this.UserToFollow}");
+                this.Interaction.Write($"{this.User} now follows {this.UserToFollow}");
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"error posting: {ex.Message}");
+                this.Interaction.Write($"error posting: {ex.Message}");
             }
         }
     }

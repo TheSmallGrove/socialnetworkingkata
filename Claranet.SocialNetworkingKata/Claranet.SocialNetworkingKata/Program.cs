@@ -1,8 +1,14 @@
 ﻿using Claranet.SocialNetworkingKata.Commands;
 using Claranet.SocialNetworkingKata.Providers;
+using Lamar;
 using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+
+[assembly: InternalsVisibleTo("Claranet.SocialNetworkingKata.Tests")]
 
 namespace Claranet.SocialNetworkingKata
 {
@@ -10,13 +16,15 @@ namespace Claranet.SocialNetworkingKata
     {
         private CommandFactory Factory { get; }
         private IStorageProvider Storage { get; }
+        private ITimeProvider Time { get; }
+        private IInteractionProvider Interaction { get; }
 
-        public object Tokenizer { get; private set; }
-
-        public Program(string storageType)
+        public Program(IContainer container)
         {
-            this.Storage = (storageType == "sqllite") ? (IStorageProvider)new SqlLiteProvider() : (IStorageProvider)new InMemoryProvider();
-            this.Factory = new CommandFactory(this.Storage);
+            this.Interaction = container.GetInstance<IInteractionProvider>();
+            this.Time = container.GetInstance<ITimeProvider>();
+            this.Storage = container.GetInstance<IStorageProvider>();
+            this.Factory = new CommandFactory(container);
         }
 
         private async Task MainLoop()
@@ -25,33 +33,37 @@ namespace Claranet.SocialNetworkingKata
 
             while (true)
             {
-                var input = this.Prompt();
+                var input = this.Interaction.Read();
                 var command = this.Factory.Create(input);
                 await command.Execute();
             }
         }
 
-        private string Prompt()
-        {
-            try
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("> ");
-                Console.ForegroundColor = ConsoleColor.White;
-                return Console.ReadLine();
-            }
-            finally
-            {
-                Console.ResetColor();
-            }
-        }
-
         static void Main(string[] args)
         {
-            var type = (args.Length == 1) ? args[0] : "sqllite";
+            using (var container = new Container(_ =>
+             {
+                 _.Injectable<IDictionary<string, string>>();
 
-            var program = new Program(type);
-            program.MainLoop().Wait();
+                 if (args.Length > 0 && args[0] == "sqllite")
+                     _.For<IStorageProvider>().Use<SqlLiteProvider>();
+                 else
+                     _.For<IStorageProvider>().Use<InMemoryProvider>();
+
+                 _.For<ITimeProvider>().Use<SystemTimeProvider>();
+                 _.For<IInteractionProvider>().Use<SystemConsoleInteractionProvider>();
+                 _.For<ISocialCommand>().Use<FollowCommand>().Named("follow");
+                 _.For<ISocialCommand>().Use<WallCommand>().Named("wall");
+                 _.For<ISocialCommand>().Use<ReadCommand>().Named("read");
+                 _.For<ISocialCommand>().Use<PostCommand>().Named("post");
+                 _.For<ISocialCommand>().Use<ExitCommand>().Named("exit");
+                 _.For<ISocialCommand>().Use<NoOpCommand>().Named("noop");
+                 _.For<ISocialCommand>().Use<UnknownCommand>().Named("unknown");
+             }))
+            {
+                var program = new Program(container);
+                program.MainLoop().Wait();
+            }            
         }
     }
 }
