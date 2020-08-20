@@ -32,7 +32,7 @@ namespace Claranet.SocialNetworkingKata.Commands
             {
                 var messages = await this.Storage.GetWallByUser(this.User);
 
-                foreach (var m in messages.OrderByDescending(_ => _.Time))
+                foreach (var m in messages)
                 {
                     this.Interaction.Write($"{m.Author} - {m.Message} ({this.Time.ToSocialTime(m.Time)})");
                 }
