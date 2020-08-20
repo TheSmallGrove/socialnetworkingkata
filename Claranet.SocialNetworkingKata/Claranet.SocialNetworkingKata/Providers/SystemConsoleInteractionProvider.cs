@@ -14,10 +14,20 @@ namespace Claranet.SocialNetworkingKata.Providers
             return Console.ReadLine();
         }
 
+        public void Write(string format, params object[] args)
+        {
+            this.Write(string.Format(format, args));
+        }
+
         public void Write(string message)
         {
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+
+        public void Warn(string format, params object[] args)
+        {
+            this.Warn(string.Format(format, args));
         }
 
         public void Warn(string message)
@@ -25,6 +35,11 @@ namespace Claranet.SocialNetworkingKata.Providers
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+
+        public void Error(string format, params object[] args)
+        {
+            this.Error(string.Format(format, args));
         }
 
         public void Error(string message)
@@ -37,6 +52,6 @@ namespace Claranet.SocialNetworkingKata.Providers
         public void Exit()
         {
             Environment.Exit(0);
-        }
+        } 
     }
 }

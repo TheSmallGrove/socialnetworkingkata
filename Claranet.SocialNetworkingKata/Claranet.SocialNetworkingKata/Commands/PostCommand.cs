@@ -1,4 +1,5 @@
-﻿using Claranet.SocialNetworkingKata.Providers;
+﻿using Claranet.SocialNetworkingKata.Properties;
+using Claranet.SocialNetworkingKata.Providers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,20 +13,36 @@ namespace Claranet.SocialNetworkingKata.Commands
         private string Message { get; }
         private IStorageProvider Storage { get; }
         private IInteractionProvider Interaction { get; }
+        private ITimeProvider Time { get; }
 
-        public PostCommand(IStorageProvider storage, IInteractionProvider interaction, IDictionary<string, string> arguments)
+        public PostCommand(IStorageProvider storage, IInteractionProvider interaction, ITimeProvider time, IDictionary<string, string> arguments)
         {
-            this.Interaction = interaction;
+            if (storage == null)
+                throw new ArgumentNullException(nameof(storage));
+
             this.Storage = storage;
+
+            if (interaction == null)
+                throw new ArgumentNullException(nameof(interaction));
+
+            this.Interaction = interaction;
+
+            if (time == null)
+                throw new ArgumentNullException(nameof(time));
+
+            this.Time = time;
+
+            if (arguments == null)
+                throw new ArgumentNullException(nameof(arguments));
 
             string user;
             if (!arguments.TryGetValue("user", out user))
-                throw new ArgumentException(nameof(user));
+                throw new ArgumentException(Resources.Exception_MissingArgument, nameof(user));
             this.User = user;
 
             string message;
             if (!arguments.TryGetValue("arg", out message))
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentException(Resources.Exception_MissingArgument, nameof(message));
             this.Message = message;
         }
 
@@ -33,12 +50,12 @@ namespace Claranet.SocialNetworkingKata.Commands
         {
             try
             {
-                await this.Storage.AddMessageForUser(this.User, this.Message, DateTime.Now);
-                this.Interaction.Warn("post sent");
+                await this.Storage.AddMessageForUser(this.User, this.Message, this.Time.Now);
+                this.Interaction.Warn(Resources.Message_PostSent);
             }
             catch(Exception ex)
             {
-                this.Interaction.Error($"error posting: {ex.Message}");
+                this.Interaction.Error(Resources.Message_Exception, ex.Message);
             }
         }
     }

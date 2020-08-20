@@ -1,4 +1,5 @@
-﻿using Claranet.SocialNetworkingKata.Providers;
+﻿using Claranet.SocialNetworkingKata.Properties;
+using Claranet.SocialNetworkingKata.Providers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Claranet.SocialNetworkingKata.Commands
 
         public Task Execute()
         {
-            this.Interaction.Warn("Bye.");
+            this.Interaction.Warn(Resources.Message_Bye);
             this.Interaction.Exit();
             return Task.CompletedTask;
         }

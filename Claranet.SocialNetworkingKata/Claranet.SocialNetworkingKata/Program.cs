@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("Claranet.SocialNetworkingKata.Tests")]
 
 namespace Claranet.SocialNetworkingKata
@@ -45,20 +46,20 @@ namespace Claranet.SocialNetworkingKata
              {
                  _.Injectable<IDictionary<string, string>>();
 
-                 if (args.Length > 0 && args[0] == "sqllite")
+                 if (args.Length > 0 && args[0] == "sqlite")
                      _.For<IStorageProvider>().Use<SqlLiteProvider>();
                  else
-                     _.For<IStorageProvider>().Use<InMemoryProvider>();
+                     _.For<IStorageProvider>().Use<InMemoryProvider>().Singleton();
 
                  _.For<ITimeProvider>().Use<SystemTimeProvider>();
                  _.For<IInteractionProvider>().Use<SystemConsoleInteractionProvider>();
-                 _.For<ISocialCommand>().Use<FollowCommand>().Named("follow");
-                 _.For<ISocialCommand>().Use<WallCommand>().Named("wall");
-                 _.For<ISocialCommand>().Use<ReadCommand>().Named("read");
-                 _.For<ISocialCommand>().Use<PostCommand>().Named("post");
-                 _.For<ISocialCommand>().Use<ExitCommand>().Named("exit");
-                 _.For<ISocialCommand>().Use<NoOpCommand>().Named("noop");
-                 _.For<ISocialCommand>().Use<UnknownCommand>().Named("unknown");
+                 _.For<ISocialCommand>().Use<FollowCommand>().Named(Commands.Commands.FollowName);
+                 _.For<ISocialCommand>().Use<WallCommand>().Named(Commands.Commands.WallName);
+                 _.For<ISocialCommand>().Use<ReadCommand>().Named(Commands.Commands.ReadName);
+                 _.For<ISocialCommand>().Use<PostCommand>().Named(Commands.Commands.PostName);
+                 _.For<ISocialCommand>().Use<ExitCommand>().Named(Commands.Commands.ExitName);
+                 _.For<ISocialCommand>().Use<NoOpCommand>().Named(Commands.Commands.NoOpName);
+                 _.For<ISocialCommand>().Use<UnknownCommand>().Named(Commands.Commands.UnknownName);
              }))
             {
                 var program = new Program(container);
