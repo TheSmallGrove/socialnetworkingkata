@@ -11,11 +11,21 @@ namespace Claranet.SocialNetworkingKata.Commands
         private string User { get; }
         private string Message { get; }
         private IStorageProvider Storage { get; }
+        private IInteractionProvider Interaction { get; }
 
-        public PostCommand(IStorageProvider storage, string user, string message)
+        public PostCommand(IStorageProvider storage, IInteractionProvider interaction, IDictionary<string, string> arguments)
         {
+            this.Interaction = interaction;
             this.Storage = storage;
+
+            string user;
+            if (!arguments.TryGetValue("user", out user))
+                throw new ArgumentException(nameof(user));
             this.User = user;
+
+            string message;
+            if (!arguments.TryGetValue("arg", out message))
+                throw new ArgumentException(nameof(message));
             this.Message = message;
         }
 
@@ -24,11 +34,11 @@ namespace Claranet.SocialNetworkingKata.Commands
             try
             {
                 await this.Storage.AddMessageForUser(this.User, this.Message, DateTime.Now);
-                Console.WriteLine("post sent");
+                this.Interaction.Warn("post sent");
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"error posting: {ex.Message}");
+                this.Interaction.Error($"error posting: {ex.Message}");
             }
         }
     }

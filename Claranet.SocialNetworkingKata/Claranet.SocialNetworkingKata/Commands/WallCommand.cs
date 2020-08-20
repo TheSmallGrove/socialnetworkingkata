@@ -11,10 +11,18 @@ namespace Claranet.SocialNetworkingKata.Commands
     {
         private string User { get; }
         private IStorageProvider Storage { get; }
+        private ITimeProvider Time { get; }
+        private IInteractionProvider Interaction { get; }
 
-        public WallCommand(IStorageProvider storage, string user)
+        public WallCommand(IStorageProvider storage, IInteractionProvider interaction, ITimeProvider time, IDictionary<string, string> arguments)
         {
+            this.Interaction = interaction;
+            this.Time = time;
             this.Storage = storage;
+
+            string user;
+            if (!arguments.TryGetValue("user", out user))
+                throw new ArgumentException(nameof(user));
             this.User = user;
         }
 
@@ -26,12 +34,12 @@ namespace Claranet.SocialNetworkingKata.Commands
 
                 foreach (var m in messages.OrderByDescending(_ => _.Time))
                 {
-                    Console.WriteLine($"{m.Author} - {m.Message} ({m.Time.ToSocialTime()})");
+                    this.Interaction.Write($"{m.Author} - {m.Message} ({this.Time.ToSocialTime(m.Time)})");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"error reading: {ex.Message}");
+                this.Interaction.Error($"error reading: {ex.Message}");
             }
         }
     }

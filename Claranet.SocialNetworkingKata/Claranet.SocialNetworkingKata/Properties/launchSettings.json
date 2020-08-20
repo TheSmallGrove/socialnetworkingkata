@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Claranet.SocialNetworkingKata": {
+      "commandName": "Project",
+      "commandLineArgs": "sqllite"
+    }
+  }
+}
