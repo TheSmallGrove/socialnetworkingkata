@@ -16,8 +16,6 @@ namespace Claranet.SocialNetworkingKata.Commands
 
     class CommandFactory : ICommandFactory
     {
-        static readonly Regex Regex = new Regex(@"^((?<command>exit)|(?<user>.*?)(\s+(?<command>.*?)(\s+(?<arg>.*?))?)?)$", RegexOptions.IgnoreCase);
-
         private IContainer Container { get; }
         private ICommandParser Parser { get; }
 
