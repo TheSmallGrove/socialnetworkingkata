@@ -1,12 +1,12 @@
 # Social Networking Kata
 
-Il codice in questo progetto Ë stato realizzato come test attitudinale per Claranet sulla base dei requisiti disponibili al seguente [link](https://github.com/xpeppers/social_networking_kata).
+Il codice in questo progetto √® stato realizzato come test attitudinale sulla base dei requisiti disponibili al seguente [link](https://github.com/xpeppers/social_networking_kata).
 
 ## Descrizione
 
-Il progetto Ë stato realizzato con Visual Studio 2019 e .NET Core 3.1. Al suo interno fa uso della libreria [Lamar](https://jasperfx.github.io/lamar/documentation/ioc/) come dependency container allo scopo di migliorare la testabilit‡ del codice.
+Il progetto √® stato realizzato con Visual Studio 2019 e .NET Core 3.1. Al suo interno fa uso della libreria [Lamar](https://jasperfx.github.io/lamar/documentation/ioc/) come dependency container allo scopo di migliorare la testabilit√† del codice.
 
-La soluzione Ë divisa in due progetti:
+La soluzione √® divisa in due progetti:
 
 ### Claranet.SocialNetworkingKata
 
@@ -18,15 +18,15 @@ Si tratta di un set minimale di unit tests usati allo scopo di validare il funzi
 
 ## Avvio del progetto
 
-In questo paragrafo si illustrano le medalit‡ di avvio del progetto
+In questo paragrafo si illustrano le medalit√† di avvio del progetto
 
 All'avvio l'applicazione chiede alcune informazioni:
 
-1) Provider da utilizzare: sono disponibili i provider di accesso ai dati sqllite e memory. Il provider sqlite Ë persistente pertanto ad ogni avvio dell'applicazione i post precedenti verranno mantenuti. Il provider memory invece viene azzerato ad ogni riavvio. Esso ha specificamente scopi di sviluppo/test.
-2) Modalit‡ di debug: impostando "yes" la console emetter‡ alcuni messaggi aggiuntivi rispetto ai requisiti. Per essere aderenti ai requisiti impostare "no" (valore di default)
+1) Provider da utilizzare: sono disponibili i provider di accesso ai dati sqllite e memory. Il provider sqlite √® persistente pertanto ad ogni avvio dell'applicazione i post precedenti verranno mantenuti. Il provider memory invece viene azzerato ad ogni riavvio. Esso ha specificamente scopi di sviluppo/test.
+2) Modalit√† di debug: impostando "yes" la console emetter√† alcuni messaggi aggiuntivi rispetto ai requisiti. Per essere aderenti ai requisiti impostare "no" (valore di default)
 3) Azzeramento del database: nel caso in cui si scelga il provider sqllite l'applicazione chiede se si vuole cancellare un precedente database nel caso esso sia presente.
 
-Impostando i valori di default (invio ripetuto) si otterr‡ il comportamento persistente pi˘ aderente ai requisiti espressi.
+Impostando i valori di default (invio ripetuto) si otterr√† il comportamento persistente pi√π aderente ai requisiti espressi.
 
 ### Avvio del progetto da Visual Studio 2019 (debug)
 
@@ -37,6 +37,6 @@ Impostando i valori di default (invio ripetuto) si otterr‡ il comportamento pers
 ### Avvio del progetto da console (publish)
 
 1) aprire una powershell o command prompt
-2) posizionarsi nella cartella dove Ë situato il file Claranet.SocialNetworkingKata.sln
+2) posizionarsi nella cartella dove √® situato il file Claranet.SocialNetworkingKata.sln
 3) eseguire il comando run.bat - il comando alla prima esecuzione compila la soluzione e la pubblica in un folder "build". In seguito avvia l'applicazione
 
