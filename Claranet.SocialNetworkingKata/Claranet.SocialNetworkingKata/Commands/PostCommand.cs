@@ -51,9 +51,11 @@ namespace Claranet.SocialNetworkingKata.Commands
             try
             {
                 await this.Storage.AddMessageForUser(this.User, this.Message, this.Time.Now);
-                this.Interaction.Warn(Resources.Message_PostSent);
+        
+                if (this.Interaction.IsDebugMode)
+                    this.Interaction.Warn(Resources.Message_PostSent);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.Interaction.Error(Resources.Message_Exception, ex.Message);
             }

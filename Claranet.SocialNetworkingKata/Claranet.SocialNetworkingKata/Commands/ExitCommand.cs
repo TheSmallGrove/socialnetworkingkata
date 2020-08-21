@@ -18,7 +18,9 @@ namespace Claranet.SocialNetworkingKata.Commands
 
         public Task Execute()
         {
-            this.Interaction.Warn(Resources.Message_Bye);
+            if (this.Interaction.IsDebugMode)
+                this.Interaction.Warn(Resources.Message_Bye);
+
             this.Interaction.Exit();
             return Task.CompletedTask;
         }

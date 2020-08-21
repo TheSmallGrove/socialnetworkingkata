@@ -9,55 +9,62 @@ using System.Text.RegularExpressions;
 
 namespace Claranet.SocialNetworkingKata.Commands
 {
-    class CommandFactory
+    public interface ICommandFactory
+    {
+        ISocialCommand Create(string input);
+    }
+
+    class CommandFactory : ICommandFactory
     {
         static readonly Regex Regex = new Regex(@"^((?<command>exit)|(?<user>.*?)(\s+(?<command>.*?)(\s+(?<arg>.*?))?)?)$", RegexOptions.IgnoreCase);
 
         private IContainer Container { get; }
+        private ICommandParser Parser { get; }
 
-        public CommandFactory(IContainer container)
+        public CommandFactory(IContainer container, ICommandParser parser)
         {
             this.Container = container;
+            this.Parser = parser;
         }
 
         public ISocialCommand Create(string input)
         {
             using (var nested = this.Container.GetNestedContainer())
             {
-                input = input.Trim();
-
-                if (string.IsNullOrEmpty(input))
-                    return nested.GetInstance<ISocialCommand>(Commands.NoOpName);
-
-                var match = CommandFactory.Regex.Match(input);
-
-                if (!match.Success)
-                    return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
-
-                IDictionary<string, string> arguments = new Dictionary<string, string>();
-
-                var command = match.Groups["command"].Value;
-                arguments.Add("user", match.Groups["user"].Value);
-                arguments.Add("arg", match.Groups["arg"].Value);
-                nested.Inject<IDictionary<string, string>>(arguments);
-
-                switch (command)
+                try
                 {
-                    case Commands.ExitCode:
-                        return nested.GetInstance<ISocialCommand>(Commands.ExitName);
-                    case Commands.FollowCode:
-                        return nested.GetInstance<ISocialCommand>(Commands.FollowName);
-                    case Commands.WallCode:
-                        return nested.GetInstance<ISocialCommand>(Commands.WallName);
-                    case Commands.PostCode:
-                        return nested.GetInstance<ISocialCommand>(Commands.PostName);
-                    case "":
-                        break;
-                    default:
-                        return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
-                }
+                    var parsed = this.Parser.Parse(input);
 
-                return nested.GetInstance<ISocialCommand>(Commands.ReadName);
+                    if (!parsed.HasValue)
+                        return nested.GetInstance<ISocialCommand>(Commands.NoOpName);
+
+                    IDictionary<string, string> arguments = new Dictionary<string, string>();
+                    arguments.Add("user", parsed.Value.user);
+                    arguments.Add("arg", parsed.Value.args);
+                    nested.Inject<IDictionary<string, string>>(arguments);
+
+                    switch (parsed.Value.command)
+                    {
+                        case Commands.ExitCode:
+                            return nested.GetInstance<ISocialCommand>(Commands.ExitName);
+                        case Commands.FollowCode:
+                            return nested.GetInstance<ISocialCommand>(Commands.FollowName);
+                        case Commands.WallCode:
+                            return nested.GetInstance<ISocialCommand>(Commands.WallName);
+                        case Commands.PostCode:
+                            return nested.GetInstance<ISocialCommand>(Commands.PostName);
+                        case "":
+                            break;
+                        default:
+                            return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
+                    }
+
+                    return nested.GetInstance<ISocialCommand>(Commands.ReadName);
+                }
+                catch (FormatException)
+                {
+                    return nested.GetInstance<ISocialCommand>(Commands.UnknownName);
+                }
             }
         }
     }

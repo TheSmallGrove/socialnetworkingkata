@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Claranet.SocialNetworkingKata.Providers
 {
-    interface IStorageProvider
+    public interface IStorageProvider
     {
         Task InitializeIfRequired();
         Task AddMessageForUser(string author, string message, DateTime time);

@@ -1,6 +1,7 @@
 ﻿using Castle.Core.Internal;
 using Claranet.SocialNetworkingKata.Commands;
 using Claranet.SocialNetworkingKata.Entities;
+using Claranet.SocialNetworkingKata.Properties;
 using Claranet.SocialNetworkingKata.Providers;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
@@ -20,6 +21,7 @@ namespace Claranet.SocialNetworkingKata.Tests
         {
             // ARRANGE
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var command = new ExitCommand(interaction.Object);
 
             // ACT
@@ -125,6 +127,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             var storage = new Mock<IStorageProvider>();
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var command = new FollowCommand(storage.Object, interaction.Object, arguments);
 
             // ACT
@@ -132,7 +135,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             // ASSERT
             storage.Verify(_ => _.AddFollowerToUser(user, arg));
-            interaction.Verify(_ => _.Write($"{user} now follows {arg}"));
+            interaction.Verify(_ => _.Warn(Resources.Message_NowFollows, user, arg));
         }
 
         [Fact]
@@ -215,7 +218,11 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             // ASSERT
             storage.Verify(_ => _.GetWallByUser(user));
-            interaction.Verify(_ => _.Write(It.IsRegex(@"^(.*?)\s\-\s(.*?)\s\(.*?\)$")), Times.Exactly(posts.Length));
+            interaction.Verify(_ => _.Write(
+                Resources.Message_WallFormat, 
+                user, 
+                It.IsAny<string>(), 
+                It.IsAny<string>()), Times.Exactly(posts.Length));
         }
 
         [Fact]
@@ -298,7 +305,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             // ASSERT
             storage.Verify(_ => _.GetMessagesByUser(user));
-            interaction.Verify(_ => _.Write(It.IsRegex(@"^(.*?)\s\(.*?\)$")), Times.Exactly(posts.Length));
+            interaction.Verify(_ => _.Write(Resources.Message_ReadFormat, It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(posts.Length));
         }
 
         [Fact]
@@ -377,6 +384,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             var storage = new Mock<IStorageProvider>();
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var time = new Mock<ITimeProvider>();
             time.SetupGet(_ => _.Now).Returns(refDate);
             
