@@ -6,6 +6,7 @@ namespace Claranet.SocialNetworkingKata.Providers
 {
     public interface IInteractionProvider
     {
+        bool IsDebugMode { get; }
         void Write(string format, params object [] args);
         void Write(string message);
         void Error(string format, params object[] args);

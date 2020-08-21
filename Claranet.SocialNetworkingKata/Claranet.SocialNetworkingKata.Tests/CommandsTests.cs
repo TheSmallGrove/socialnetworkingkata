@@ -21,6 +21,7 @@ namespace Claranet.SocialNetworkingKata.Tests
         {
             // ARRANGE
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var command = new ExitCommand(interaction.Object);
 
             // ACT
@@ -126,6 +127,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             var storage = new Mock<IStorageProvider>();
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var command = new FollowCommand(storage.Object, interaction.Object, arguments);
 
             // ACT
@@ -133,7 +135,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             // ASSERT
             storage.Verify(_ => _.AddFollowerToUser(user, arg));
-            interaction.Verify(_ => _.Write(Resources.Message_NowFollows, user, arg));
+            interaction.Verify(_ => _.Warn(Resources.Message_NowFollows, user, arg));
         }
 
         [Fact]
@@ -382,6 +384,7 @@ namespace Claranet.SocialNetworkingKata.Tests
 
             var storage = new Mock<IStorageProvider>();
             var interaction = new Mock<IInteractionProvider>();
+            interaction.SetupGet(_ => _.IsDebugMode).Returns(true);
             var time = new Mock<ITimeProvider>();
             time.SetupGet(_ => _.Now).Returns(refDate);
             

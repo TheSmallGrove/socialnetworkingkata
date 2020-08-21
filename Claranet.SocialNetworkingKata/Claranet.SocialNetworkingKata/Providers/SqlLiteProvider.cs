@@ -11,11 +11,13 @@ namespace Claranet.SocialNetworkingKata.Providers
 {
     class SqlLiteProvider : IStorageProvider
     {
+        public static readonly string SqlLiteDatabasePath = $"{Environment.CurrentDirectory}\\social.db";
+
         private FileInfo File
         {
             get
             {
-                return new FileInfo($"{Environment.CurrentDirectory}\\social.db");
+                return new FileInfo(SqlLiteDatabasePath);
             }
         }
 

@@ -6,6 +6,13 @@ namespace Claranet.SocialNetworkingKata.Providers
 {
     class SystemConsoleInteractionProvider : IInteractionProvider
     {
+        public bool IsDebugMode { get; }
+
+        public SystemConsoleInteractionProvider(bool isDebugMode = false)
+        {
+            this.IsDebugMode = isDebugMode;
+        }
+
         public string Read()
         {
             Console.ForegroundColor = ConsoleColor.Green;

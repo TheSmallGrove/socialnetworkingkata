@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Claranet.SocialNetworkingKata": {
-      "commandName": "Project",
-      "commandLineArgs": "sqlite"
+      "commandName": "Project"
     }
   }
 }
