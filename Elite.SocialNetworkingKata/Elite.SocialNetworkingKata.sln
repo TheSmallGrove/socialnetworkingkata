@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1209
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "$files", "$files", "{2CEA8F0D-F082-4511-B552-18B98C71CE7D}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+		run.bat = run.bat
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elite.SocialNetworkingKata", "Elite.SocialNetworkingKata\Elite.SocialNetworkingKata.csproj", "{CD2EDCA7-9714-4033-9362-06D1476B5C69}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elite.SocialNetworkingKata.Tests", "Elite.SocialNetworkingKata.Tests\Elite.SocialNetworkingKata.Tests.csproj", "{9A193C45-A27F-4427-A4F7-FDCDC603E5EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD2EDCA7-9714-4033-9362-06D1476B5C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD2EDCA7-9714-4033-9362-06D1476B5C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD2EDCA7-9714-4033-9362-06D1476B5C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD2EDCA7-9714-4033-9362-06D1476B5C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A193C45-A27F-4427-A4F7-FDCDC603E5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A193C45-A27F-4427-A4F7-FDCDC603E5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A193C45-A27F-4427-A4F7-FDCDC603E5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A193C45-A27F-4427-A4F7-FDCDC603E5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F8BF807-8035-483E-AD58-25F7EBA70AF2}
+	EndGlobalSection
+EndGlobal
