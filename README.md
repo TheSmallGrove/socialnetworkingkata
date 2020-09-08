@@ -8,11 +8,11 @@ Il progetto è stato realizzato con Visual Studio 2019 e .NET Core 3.1. Al suo i
 
 La soluzione è divisa in due progetti:
 
-### Claranet.SocialNetworkingKata
+### Elite.SocialNetworkingKata
 
 Si tratta del progetto Console la cui compilazione genera l'applicazione eseguibile. 
 
-### Claranet.SocialNetworkingKata.Tests
+### Elite.SocialNetworkingKata.Tests
 
 Si tratta di un set minimale di unit tests usati allo scopo di validare il funzionamento di alcuni componenti critici anche mediante TDD. In particolare vi si trova anche un test di integrazione (RequirementsTests.cs) che riprende i requisiti espressi e li valida mediante un test di integrazione.
 
@@ -31,12 +31,12 @@ Impostando i valori di default (invio ripetuto) si otterrà il comportamento per
 ### Avvio del progetto da Visual Studio 2019 (debug)
 
 1) aprire il progetto con Visual Studio 2019
-2) impostare Claranet.SocialNetworkingKata come progetto di avvio
+2) impostare Elite.SocialNetworkingKata come progetto di avvio
 3) Premere F5
 
 ### Avvio del progetto da console (publish)
 
 1) aprire una powershell o command prompt
-2) posizionarsi nella cartella dove è situato il file Claranet.SocialNetworkingKata.sln
+2) posizionarsi nella cartella dove è situato il file Elite.SocialNetworkingKata.sln
 3) eseguire il comando run.bat - il comando alla prima esecuzione compila la soluzione e la pubblica in un folder "build". In seguito avvia l'applicazione
 
